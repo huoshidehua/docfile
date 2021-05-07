@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<script src="https://code.jquery.com/jquery-3.6.0.min.js" type="text/javascript" charset="utf-8"></script>
+	</head>
+	<body>
+		<button type="button" onclick="downloadpic()">下载</button>
+
+		<script type="text/javascript">
+			function downloadpic() {
+				// https://image.rakuten.co.jp/ebisushop-japan/cabinet/00003/ck0052-1.jpg
+				// https://image.rakuten.co.jp/ebisushop-japan/cabinet/00003/ck0064-ck0092-94-1.jpg
+				let url = ['./a.xls', './b.xls']
+				for (var i = 0; i < url.length; i++) {
+					formSubmit(url[i]);
+				}
+				//formSubmit("./ck0052-1.webp");
+				//formSubmit("./ck0064-ck0092-94-1.webp")
+
+
+			}
+
+			function formSubmit(url, param) {
+				let $iframe = $('<iframe src="' + url + '" name="temp_frame" style="display:none"></iframe>')
+				$("body").append($iframe);
+				let $form = $('<form action="' + url + '" method="post" target="temp_frame">');
+				$.each(param, function(i, val) {
+					$form.append($('<input name="' + i + '" value="' + val + '" />'))
+					// text = text + "Key:" + i + ", Value:" + val; 
+				});
+
+				$("body").append($form);
+				$form.submit().remove();
+				setTimeout(() => {
+					$iframe.remove();
+				}, 3000);
+			}
+
+			downloadFile = (url) => {
+				const iframe = document.createElement("iframe");
+				iframe.style.display = "none"; // 防止影响页面
+				iframe.style.height = 0; // 防止影响页面
+				iframe.src = url;
+				document.body.appendChild(iframe); // 这一行必须，iframe挂在到dom树上才会发请求
+				// 5分钟之后删除（onload方法对于下载链接不起作用，就先抠脚一下吧）
+				setTimeout(() => {
+					iframe.remove();
+				}, 5 * 60 * 1000);
+			}
+		</script>
+	</body>
+</html>
